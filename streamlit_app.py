@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from langchain.llms import OpenAI
 from langchain.document_loaders import PyPDFLoader
@@ -9,13 +10,14 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
 st.title("📝 File Q&A ") 
 uploaded_file = st.file_uploader("Upload an article", type=("txt", "md", "pdf")) 
+tmp_location = os.path.join('/tmp', uploaded_file.filename)
 
 
 if uploaded_file and not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
 
 if uploaded_file and openai_api_key:
-    loader = PyPDFLoader(uploaded_file)
+    loader = PyPDFLoader(tmp_location)
     pages = loader.load_and_split()
     embeddings_model = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
