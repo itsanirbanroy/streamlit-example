@@ -11,7 +11,6 @@ from langchain.indexes import VectorstoreIndexCreator
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-os.environ["OPENAI_API_KEY"] = "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"
 
 openai_api_key = st.sidebar.text_input('OpenAI API Key')
 embeddings_model = None
@@ -23,8 +22,8 @@ uploaded_file = st.file_uploader("Upload an article", type=("txt", "md", "pdf"))
 #tmp_location = os.path.join('/tmp', uploaded_file.filename)
 
 
-#if uploaded_file and not openai_api_key:
-    #st.info("Please add your OpenAI API key to continue.")
+if uploaded_file and not openai_api_key:
+    st.info("Please add your OpenAI API key to continue.")
 
 
 def createEmbedding():
@@ -37,7 +36,7 @@ def createEmbedding():
     pages = loader.load_and_split()
 
     global index
-    embeddings_model = OpenAIEmbeddings()
+    embeddings_model = OpenAIEmbeddings(openai_api_key=openai_api_key)
     index = VectorstoreIndexCreator(embedding=embeddings_model).from_loaders([loader])
 
 def generate_response(input_text):
