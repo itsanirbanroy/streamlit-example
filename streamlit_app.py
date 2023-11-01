@@ -8,13 +8,13 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
 st.title("📝 File Q&A ") 
-uploaded_file = st.file_uploader("Upload an article", type=("txt", "md")) 
+uploaded_file = st.file_uploader("Upload an article", type=("txt", "md", "pdf")) 
 
 
-if uploaded_file and question and not openai_api_key:
+if uploaded_file and not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
 
-if uploaded_file and question and openai_api_key:
+if uploaded_file and openai_api_key:
     loader = PyPDFLoader(uploaded_file)
     pages = loader.load_and_split()
     embeddings_model = OpenAIEmbeddings(openai_api_key=openai_api_key)
